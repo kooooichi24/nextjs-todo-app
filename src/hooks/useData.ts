@@ -36,7 +36,7 @@ export const useData = () => {
 
   const toggleComplete = (id: Task['id']): void => {
     const newData = [...data]
-    for (var i in newData) {
+    for (const i in newData) {
       if (newData[i].id == id) {
         newData[i].complete = newData[i].complete === true ? false : true
         break
