@@ -8,7 +8,7 @@ export const useData = (initialValue: Task[]) => {
     return Math.floor(Math.random() * 90000) + 10000
   }
 
-  const remove = (id: Task['id']): void => {
+  const removeData = (id: Task['id']): void => {
     const newData = [...data]
     const filterdData = newData.filter((el) => {
       return el.id !== id
@@ -17,7 +17,7 @@ export const useData = (initialValue: Task[]) => {
     return
   }
 
-  const submit = (task: Task['name']): void => {
+  const addData = (task: Task['name']): void => {
     const id = generateId().toString()
     const complete = false
     setData((prevData) => [...prevData, { id, name: task, complete }])
@@ -35,5 +35,5 @@ export const useData = (initialValue: Task[]) => {
     return
   }
 
-  return [data, { remove, submit, toggleComplete }] as const
+  return [data, { removeData, addData, toggleComplete }] as const
 }
