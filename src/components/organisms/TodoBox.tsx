@@ -3,11 +3,7 @@ import { TodoForm } from '../molecules/TodoForm'
 import { TodoList } from '../molecules/TodoList'
 
 export const TodoBox = () => {
-  const [data, { removeData, addData, toggleComplete }] = useData([
-    { id: '00001', name: 'Wake up', complete: false },
-    { id: '00002', name: 'Eat breakfast', complete: false },
-    { id: '00003', name: 'Go to work', complete: false }
-  ])
+  const [data, { removeData, addData, toggleComplete }] = useData()
 
   return (
     <div className="well">

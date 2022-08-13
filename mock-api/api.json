@@ -1,0 +1,7 @@
+{
+  "tasks": [
+    { "id": "00001", "name": "Wake up", "complete": false },
+    { "id": "00002", "name": "Eat breakfast", "complete": false },
+    { "id": "00003", "name": "Go to work", "complete": false }
+  ]
+}

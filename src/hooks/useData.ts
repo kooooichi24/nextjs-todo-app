@@ -1,8 +1,19 @@
-import { useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { Task } from '../types'
 
-export const useData = (initialValue: Task[]) => {
-  const [data, setData] = useState<Task[]>(initialValue)
+export const useData = () => {
+  const [data, setData] = useState<Task[]>([])
+
+  useEffect(() => {
+    const fetchTasks = async (): Promise<void> => {
+      const response = await axios.get('http://localhost:3004/tasks')
+      console.log('fetchTasks() response.data: ', response.data)
+      setData(response.data)
+    }
+
+    fetchTasks()
+  }, [])
 
   const generateId = (): number => {
     return Math.floor(Math.random() * 90000) + 10000
