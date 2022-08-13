@@ -1,14 +1,10 @@
 import type { NextPage } from 'next'
 import { useState } from 'react'
-
-type Data = {
-  id: string
-  task: string
-  complete: boolean
-}
+import { useData } from '../hooks/useData'
+import { Task } from '../types'
 
 type TodoFormProps = {
-  onTaskSubmit: (task: Data['task']) => void
+  onTaskSubmit: (task: Task['name']) => void
 }
 
 const TodoForm = ({ onTaskSubmit }: TodoFormProps) => {
@@ -56,14 +52,14 @@ const TodoForm = ({ onTaskSubmit }: TodoFormProps) => {
 }
 
 type TodoItemProps = {
-  nodeId: Data['id']
-  task: Data['task']
-  complete: Data['complete']
-  removeNode: (nodeId: Data['id']) => void
-  toggleComplete: (nodeId: Data['id']) => void
+  nodeId: Task['id']
+  name: Task['name']
+  complete: Task['complete']
+  removeNode: (nodeId: Task['id']) => void
+  toggleComplete: (nodeId: Task['id']) => void
 }
 
-const TodoItem = ({ nodeId, task, complete, removeNode, toggleComplete }: TodoItemProps) => {
+const TodoItem = ({ nodeId, name, complete, removeNode, toggleComplete }: TodoItemProps) => {
   const handleToggleComplete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     toggleComplete(nodeId)
@@ -76,7 +72,7 @@ const TodoItem = ({ nodeId, task, complete, removeNode, toggleComplete }: TodoIt
 
   return (
     <li className={'list-group-item clearfix' + (complete === true ? ' list-group-item-success' : '')}>
-      {task}
+      {name}
       <div className="pull-right" role="group">
         <button type="button" className="btn btn-xs btn-success img-circle" onClick={handleToggleComplete}>
           &#x2713;
@@ -90,18 +86,18 @@ const TodoItem = ({ nodeId, task, complete, removeNode, toggleComplete }: TodoIt
 }
 
 type TodoListProps = {
-  data: Data[]
-  removeNode: (nodeId: Data['id']) => void
-  toggleComplete: (nodeId: Data['id']) => void
+  tasks: Task[]
+  removeNode: (nodeId: Task['id']) => void
+  toggleComplete: (nodeId: Task['id']) => void
 }
 
-const TodoList = ({ data, removeNode, toggleComplete }: TodoListProps) => {
-  const listNodes = data.map(function (listItem) {
+const TodoList = ({ tasks, removeNode, toggleComplete }: TodoListProps) => {
+  const listNodes = tasks.map(function (listItem) {
     return (
       <TodoItem
         key={listItem.id}
         nodeId={listItem.id}
-        task={listItem.task}
+        name={listItem.name}
         complete={listItem.complete}
         removeNode={removeNode}
         toggleComplete={toggleComplete}
@@ -113,48 +109,17 @@ const TodoList = ({ data, removeNode, toggleComplete }: TodoListProps) => {
 }
 
 const TodoBox = () => {
-  const [data, setData] = useState<Data[]>([
-    { id: '00001', task: 'Wake up', complete: false },
-    { id: '00002', task: 'Eat breakfast', complete: false },
-    { id: '00003', task: 'Go to work', complete: false }
+  const [data, { remove, submit, toggleComplete }] = useData([
+    { id: '00001', name: 'Wake up', complete: false },
+    { id: '00002', name: 'Eat breakfast', complete: false },
+    { id: '00003', name: 'Go to work', complete: false }
   ])
-
-  const generateId = (): number => {
-    return Math.floor(Math.random() * 90000) + 10000
-  }
-
-  const handleNodeRemoval = (nodeId: Data['id']): void => {
-    const newData = [...data]
-    const filterdData = newData.filter((el) => {
-      return el.id !== nodeId
-    })
-    setData(filterdData)
-    return
-  }
-
-  const handleSubmit = (task: Data['task']): void => {
-    const id = generateId().toString()
-    const complete = false
-    setData((prevData) => [...prevData, { id, task, complete }])
-  }
-
-  const handleToggleComplete = (nodeId: Data['id']): void => {
-    const newData = [...data]
-    for (var i in newData) {
-      if (newData[i].id == nodeId) {
-        newData[i].complete = newData[i].complete === true ? false : true
-        break
-      }
-    }
-    setData(newData)
-    return
-  }
 
   return (
     <div className="well">
       <h1 className="vert-offset-top-0">To do:</h1>
-      <TodoList data={data} removeNode={handleNodeRemoval} toggleComplete={handleToggleComplete} />
-      <TodoForm onTaskSubmit={handleSubmit} />
+      <TodoList tasks={data} removeNode={remove} toggleComplete={toggleComplete} />
+      <TodoForm onTaskSubmit={submit} />
     </div>
   )
 }
