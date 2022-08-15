@@ -8,7 +8,7 @@ type TodoListProps = {
 }
 
 export const TodoList = ({ tasks, removeNode, toggleComplete }: TodoListProps) => {
-  const listNodes = tasks.map(function (listItem) {
+  const listNodes = tasks.map((listItem) => {
     return (
       <TodoItem
         key={listItem.id}
