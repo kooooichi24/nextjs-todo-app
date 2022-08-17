@@ -6,13 +6,11 @@ export const useData = () => {
   const [data, setData] = useState<Task[]>([])
 
   useEffect(() => {
-    const fetchTasks = async (): Promise<void> => {
+    ;(async (): Promise<void> => {
       const response = await axios.get('http://localhost:3004/tasks')
       console.log('fetchTasks() response.data: ', response.data)
       setData(response.data)
-    }
-
-    fetchTasks()
+    })()
   }, [])
 
   const generateId = (): number => {
